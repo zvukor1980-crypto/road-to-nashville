@@ -26,7 +26,7 @@ function setup(){
   if(!f.type.startsWith('image/'))return notify('Выбери фотографию');
   if(f.size>25*1024*1024)return notify('Обложка больше 25 МБ');
   const key='image:'+current.id+':'+t.id+':track-cover';
-  try{await put(key,f);t.coverKey=key;save();closeSheet();paint();notify('Обложка песни сохранена')}catch(err){notify('Не удалось сохранить фото')}
+  try{await put(key,f);if(st.images.has(key)){URL.revokeObjectURL(st.images.get(key));st.images.delete(key)}t.coverKey=key;save();closeSheet();paint();notify('Обложка песни сохранена')}catch(err){notify('Не удалось сохранить фото')}
  };
  const batch=D.createElement('input');batch.id='studioFiles';batch.type='file';batch.accept='audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus';batch.multiple=true;batch.hidden=true;D.body.append(batch);
  batch.onchange=async e=>{const files=Array.from(e.target.files||[]);e.target.value='';if(files.length)await makeAlbum(files)};
