@@ -1,6 +1,6 @@
 /* Ra'ash Yafe offline shell. Media remains in IndexedDB, not Cache Storage. */
-const CACHE='raash-yafe-v3';
-const CORE=['./','index.html','backup.js','studio-v3.js','studio-v3.css','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
+const CACHE='raash-yafe-v4';
+const CORE=['./','index.html','backup.js','studio-v3.js','studio-v3.css','studio-v4.js','studio-v4.css','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
 const SCOPE=new URL(self.registration.scope).pathname;
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
