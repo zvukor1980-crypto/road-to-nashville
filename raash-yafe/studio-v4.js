@@ -282,10 +282,13 @@ async function renderWAV(t,baseIndex,progress){
   const rate=32000,frames=Math.ceil((position+.1)*rate);
   const Offline=window.OfflineAudioContext||window.webkitOfflineAudioContext;
   const offline=new Offline(2,frames,rate);
+  // Protect final WAV from severe clipping when microphones overlap the original mix.
+  const mixLimiter=offline.createDynamicsCompressor();mixLimiter.threshold.value=-9;mixLimiter.knee.value=12;mixLimiter.ratio.value=8;mixLimiter.attack.value=.004;mixLimiter.release.value=.18;
+  mixLimiter.connect(offline.destination);
   clips.forEach(x=>{
    const node=offline.createBufferSource();node.buffer=x.buffer;
    const gain=offline.createGain();gain.gain.value=x.level;
-   node.connect(gain);gain.connect(offline.destination);
+   node.connect(gain);gain.connect(mixLimiter);
    node.start(x.at);
   });
   progress('Свожу все дорожки...');
