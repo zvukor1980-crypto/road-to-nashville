@@ -96,7 +96,7 @@ async function get(key){if(!key)return null;const db=await openDB();return new P
 async function remove(key){if(!key)return;const db=await openDB();const tx=db.transaction('files','readwrite');tx.objectStore('files').delete(key)}
 function notify(s){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';Object.assign(el.style,{position:'fixed',zIndex:99,bottom:'155px',left:'8%',right:'8%',margin:'auto',maxWidth:'460px',padding:'13px',textAlign:'center',color:'#fff',background:'#52233c',border:'1px solid #ff91b9',borderRadius:'14px',boxShadow:'0 6px 25px #000b'});document.body.append(el)}el.textContent=s;clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.remove(),3400)}
 function openSheet(title,body){$('#sheettitle').textContent=title;$('#sheetbody').innerHTML=body;$('#overlay').classList.add('show')}
-function closeSheet(){$('#overlay').classList.remove('show')}
+function closeSheet(){const frame=$('#sheetbody iframe[src^="https://suno.com/embed/"]');if(frame)frame.src='about:blank';$('#overlay').classList.remove('show')}
 $('#close').onclick=closeSheet;$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeSheet()});
 function album(){return current}
 function albumSong(id){return current.tracks.find(x=>x.id===id)}
