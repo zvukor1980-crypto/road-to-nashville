@@ -74,6 +74,7 @@ function keysFrom(library){
    if(typeof track.coverKey==='string')keys.add(track.coverKey);
    if(typeof track.videoKey==='string')keys.add(track.videoKey);
    for(const variant of track.variants||[])if(typeof variant.fileKey==='string')keys.add(variant.fileKey);
+   for(const take of track.takes||[])if(typeof take.fileKey==='string')keys.add(take.fileKey);
   }
  }
  return [...keys];
@@ -119,7 +120,7 @@ async function restoreAll(file,write,onProgress){
  const replace=k=>!k?null:map.get(k)||null;
  for(const a of archiveLibrary.albums){
   a.coverKey=replace(a.coverKey);a.backKey=replace(a.backKey);
-  for(const t of a.tracks){t.coverKey=replace(t.coverKey);t.videoKey=replace(t.videoKey);for(const v of t.variants)v.fileKey=replace(v.fileKey)}
+  for(const t of a.tracks){t.coverKey=replace(t.coverKey);t.videoKey=replace(t.videoKey);for(const v of t.variants)v.fileKey=replace(v.fileKey);for(const take of t.takes||[])take.fileKey=replace(take.fileKey)}
  }
  if(!archiveLibrary.albums.some(x=>x.id===archiveLibrary.current))archiveLibrary.current=archiveLibrary.albums[0].id;
  return {library:archiveLibrary,restored,missingCount:missing.size};
