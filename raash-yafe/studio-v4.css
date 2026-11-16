@@ -1,0 +1,39 @@
+/* Raash Yafe Studio v4 — compact lacquer controls, iPhone safe areas */
+.v4-quick{margin:12px 0 16px;padding:13px;border:1px solid #f47b9b6b;border-radius:19px;background:linear-gradient(155deg,#3e1525 0%,#240d17 49%,#110b10 100%);box-shadow:inset 0 1px #ffffff2e,0 10px 32px #0008}
+.v4-head{display:flex;align-items:baseline;gap:8px;justify-content:space-between;padding:0 2px 11px}.v4-head b{font-size:12px;letter-spacing:1.2px;color:#fff4f7}.v4-head span{font-size:11px;color:#ec9db7}
+.v4-main-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.v4-main{min-height:47px;padding:7px;border-radius:12px;border:1px solid #f7acc14d;background:linear-gradient(155deg,#4e2638,#21101a);color:#ffe3ea;font-weight:750;font-size:13px;line-height:1.2;box-shadow:inset 0 1px #ffffff1c}
+.v4-main-hot{background:linear-gradient(115deg,#ff759d,#c61e4e);color:#25000e;border-color:#ff84aa}
+.v4-rec-banner{margin-top:10px;padding:10px;border-radius:11px;background:#4a0c26;border:1px solid #ff7b9a;color:#ffc5d4;font-size:13px;font-weight:750}
+.v4-rec-banner[hidden]{display:none}.v4-rec-banner span{color:#fff;font-variant-numeric:tabular-nums}.v4-rec-banner button{border:1px solid #ffd3e1;border-radius:8px;color:#fff;background:#811637;font-size:12px;padding:6px 9px;margin-left:7px}
+.v4-song-action{display:flex;gap:8px;margin:9px 0 0 35px;align-items:center;justify-content:space-between}
+.v4-small{border-radius:11px;border:1px solid #f581a35d;min-height:34px;flex:1;background:#f65d9022;color:#ffd9e8;font-size:12px;font-weight:750}
+.v4-take-count{color:#ffb4cd;font-size:11px;white-space:nowrap}
+.v4-explain{padding:12px 13px;background:#fa619013;color:#f7cfdc!important;border-radius:12px;border:1px solid #f8a0bc53}
+.v4-status{font-size:12px;line-height:1.55;margin:12px 0;background:#ffffff0c;border:1px solid #ffffff2c;padding:11px;border-radius:12px;color:#f2cbd9}
+.v4-status b{display:block;margin-bottom:4px;color:#fff}
+.v4-row{display:flex;gap:9px;margin:12px 0;align-items:stretch}
+.v4-row>*{flex:1;min-width:0;min-height:43px;font-size:12px!important}
+.v4-row>.cta{margin:0}
+.v4-section{font-size:17px;font-weight:820;color:#ffeaf0;margin:23px 0 10px;border-bottom:1px solid #ff88a952;padding-bottom:8px}
+.v4-rec-start{border:1px solid #ff8ead;background:linear-gradient(115deg,#ff7d9e,#da1b51);color:#21030e;font-weight:850;border-radius:14px;padding:10px}
+.v4-rec-start:disabled,.v4-row button:disabled{opacity:.4}
+.v4-take{display:flex;align-items:center;gap:6px;padding:10px 8px;border:1px solid #ffffff27;border-radius:11px;margin:7px 0;background:#ffffff0b}
+.v4-take>div{min-width:0;flex:1}
+.v4-take b{color:#ffe0e8;font-size:12px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v4-take small{color:#c9a8b6;display:block;margin-top:3px;font-size:11px}
+.v4-take button{width:33px;height:34px;border-radius:9px;border:1px solid #ffffff36;background:#ffffff15;color:#fff;font-weight:800}
+.v4-empty{font-style:italic}
+.v4-choice{display:flex;width:100%;gap:10px;justify-content:space-between;align-items:center;margin:6px 0;min-height:49px;text-align:left;border-radius:12px;border:1px solid #ef85aa54;padding:12px;background:#ffffff0e;color:#ffeaf0}
+.v4-choice span{font-size:11px;color:#ffabc5}
+.v4-switch{display:flex;align-items:center;gap:10px;padding:10px 0;color:#fff0ee;font-weight:700}
+.v4-switch input{width:21px;height:21px;accent-color:#ff638f}
+.v4-presets{display:flex;gap:6px;overflow-x:auto;padding:5px 0 14px;scrollbar-width:none}
+.v4-preset{flex:none;font-size:12px;padding:9px 11px;border:1px solid #ffffff33;border-radius:12px;background:#ffffff13;color:#ffcedf;font-weight:700}
+.v4-eq-band{display:grid;grid-template-columns:minmax(90px,1fr) minmax(80px,2fr) 45px;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #ffffff17}
+.v4-eq-band label{color:#eed0dc;font-size:12px}
+.v4-eq-band input{accent-color:#ff6a9d;width:100%}
+.v4-eq-band strong{font-size:11px;color:#ffc0d8;text-align:right;font-variant-numeric:tabular-nums}
+.v4-download{display:flex;align-items:center;justify-content:center;border-radius:14px;border:1px solid #ffabc3;background:#f8629023;color:#ffe1eb;text-decoration:none;font-size:12px;font-weight:800}
+@media(max-width:380px){.v4-head{display:block}.v4-head span{display:block;margin-top:5px}.v4-main{font-size:11px}.v4-song-action{margin-left:0}.v4-eq-band{grid-template-columns:minmax(70px,1fr) minmax(75px,1.5fr) 43px;gap:4px}}
+@media(prefers-reduced-motion:reduce){.v4-main,.v4-rec-start,.v4-small{transition:none!important}}
