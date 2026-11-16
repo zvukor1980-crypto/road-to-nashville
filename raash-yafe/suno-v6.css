@@ -1,0 +1,25 @@
+/* RA'ASH YAFE 6 — one-step Suno music shelf; strict editorial styling. */
+#sSunoHub{padding:15px 16px 16px;margin:12px 0 18px;background:linear-gradient(155deg,#202125,#141519 68%,#151317);border:1px solid #48454b;border-radius:16px;box-shadow:inset 0 1px #ffffff0c,0 4px 20px #0005}
+.s6-hub-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.s6-hub-header>div{display:grid;gap:3px}.s6-hub-header strong{font-size:13px;color:#f7f7f4;font-weight:850;letter-spacing:.7px}.s6-hub-header span{font-size:12px;color:#aaaab0}
+.s6-symbol{display:grid;place-items:center;color:#ed566a!important;font-size:25px!important;font-weight:850;width:37px;height:37px;border-radius:10px;background:#632a342d;border:1px solid #86434b}
+.s6-big{display:block;width:100%;min-height:51px;border-radius:11px;border:1px solid #e94d62;background:linear-gradient(125deg,#d83b52,#ad263b);color:#fff;font-size:15px;font-weight:850;box-shadow:inset 0 1px #ffa5ac40}
+#sSunoEmpty{color:#b3b0b5;font-size:12px;line-height:1.45;margin:11px 1px 0}#sSunoEmpty[hidden]{display:none}
+.s6-source{display:inline-block;vertical-align:middle;font:800 9px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;letter-spacing:.5px;margin-left:5px;padding:2px 4px;color:#ffa8b2;background:#74263838;border:1px solid #8e404b54;border-radius:4px}
+.s-song-play.s6-has-stream{background:#3a232a!important;border:1px solid #c94b61!important;color:#ffc6ce!important}
+.s6-steps{border-radius:12px;border:1px solid #555056;background:#212127;padding:13px 14px;color:#eeeeee;font-size:13px;line-height:1.95}
+.s6-steps>b{color:#ff7287;font-size:14px;margin-right:6px}
+.s6-textarea{display:block;width:100%;min-height:112px;box-sizing:border-box;color:#f6f4f1;background:#0e0f12;border:1px solid #565159;border-radius:12px;padding:12px;font-size:16px;line-height:1.45;resize:vertical;overflow-y:auto;outline:none}
+.s6-textarea:focus,#s6Long:focus{border-color:#e75a72;box-shadow:0 0 0 2px #e75a722a}
+.s6-textarea::placeholder{color:#77767d;font-size:12px}
+.s6-paste{display:block;width:100%;margin:9px 0;padding:12px 10px;min-height:42px;color:#eee7e9;font-size:13px;font-weight:750;background:#29292d;border-radius:10px;border:1px solid #535057}
+.s6-muted{padding:9px 10px;margin:8px 0 0;color:#b7b5bd;font-size:12px;line-height:1.5;background:#27252a;border-left:2px solid #c4445b;border-radius:3px 8px 8px 3px}
+.s6-footnote{font-size:12px!important;line-height:1.6!important;color:#aaa4ab!important;margin:13px 0 5px!important}
+.s6-player-note{font-size:13px!important;line-height:1.6!important;color:#f3e7eb!important;padding:12px;border:1px solid #74404b;background:#271b21;border-radius:11px}
+.s6-frame{width:100%;background:#111115;border-radius:13px;overflow:hidden;min-height:190px;border:1px solid #444047}
+.s6-frame>iframe{display:block;width:100%;height:190px;border:0}
+.s6-play-desc{font-size:13px;line-height:1.6;color:#e9e1e4;margin:14px 0}
+.s6-play-desc span{color:#a9a7ad;font-size:12px}
+body:has(.s6-frame) .s-player{visibility:hidden;pointer-events:none}
+@media(max-width:390px){#sSunoHub{padding:13px}.s6-hub-header strong{font-size:12px}.s6-big{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.s6-big,.s6-paste{transition:none!important}}
