@@ -20,6 +20,6 @@
 .s6-frame>iframe{display:block;width:100%;height:190px;border:0}
 .s6-play-desc{font-size:13px;line-height:1.6;color:#e9e1e4;margin:14px 0}
 .s6-play-desc span{color:#a9a7ad;font-size:12px}
-body:has(.s6-frame) .s-player{visibility:hidden;pointer-events:none}
+body:has(#overlay.show .s6-frame) .s-player{visibility:hidden;pointer-events:none}
 @media(max-width:390px){#sSunoHub{padding:13px}.s6-hub-header strong{font-size:12px}.s6-big{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.s6-big,.s6-paste{transition:none!important}}
