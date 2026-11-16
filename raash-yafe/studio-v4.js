@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const D=document;
-const state={recorder:null,stream:null,recStart:0,ticker:null,recording:false,rendering:false,objects:[],eqctx:null,filters:[],eqOn:false,preview:null};
+const state={recorder:null,stream:null,recStart:0,ticker:null,recording:false,rendering:false,objects:[],eqctx:null,filters:[],eqOn:false,preview:null,importTakeTarget:null};
 const h=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const q=s=>D.querySelector(s), track=id=>current.tracks.find(t=>t.id===id);
 const time=n=>{n=Math.max(0,Math.floor(Number(n)||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')};
@@ -33,6 +33,19 @@ function enableStudioButtons(){
 }
 function init(){
  topControls();
+ const takeChooser=D.createElement('input');takeChooser.id='v4TakeFile';takeChooser.type='file';takeChooser.accept='audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus';takeChooser.hidden=true;D.body.append(takeChooser);
+ takeChooser.onchange=async e=>{
+  const f=e.target.files?.[0];e.target.value='';const target=state.importTakeTarget;state.importTakeTarget=null;
+  if(!f||!target)return;
+  const a=library.albums.find(x=>x.id===target.albumId),t=a?.tracks.find(x=>x.id===target.id);
+  if(!t){notify('Песня не найдена');return}
+  const key='take:'+target.albumId+':'+target.id+':file:'+Date.now();
+  try{
+   await put(key,f);t.takes=Array.isArray(t.takes)?t.takes:[];
+   t.takes.push({id:'take-'+Date.now(),fileKey:key,mode:target.mode,offsetSec:target.offsetSec,createdAt:new Date().toISOString(),durationSec:0,label:f.name});
+   save();paint();openFor(target.id);notify('Фрагмент импортирован: '+f.name)
+  }catch(e){notify('Не удалось сохранить фрагмент')}
+ };
  const prior=paint;paint=function(){prior();enableStudioButtons()};
  enableStudioButtons();
  D.addEventListener('pointerdown',()=>{if(state.eqctx?.state==='suspended')state.eqctx.resume().catch(()=>{})},{capture:true});
@@ -112,7 +125,7 @@ function openFor(id,version){
  '<label class="field" for="v4Mode">Как использовать следующий фрагмент</label>'+
  '<select class="fieldinput" id="v4Mode"><option value="append">Продолжение — после конца песни</option><option value="overlay">Наложение — вокал / инструмент поверх музыки</option></select>'+
  '<label class="field" for="v4Offset">Для наложения: с какой секунды начать</label><input id="v4Offset" class="fieldinput" type="number" min="0" step=".1" max="900" value="'+(Number.isFinite(audio.currentTime)?audio.currentTime.toFixed(1):'0')+'">'+
- '<div class="v4-row"><button class="v4-rec-start" id="v4MicStart">● Запись с микрофона</button><button class="ghost" id="v4MicStop" disabled>■ Стоп</button></div>'+
+ '<div class="v4-row"><button class="v4-rec-start" id="v4MicStart">● Запись с микрофона</button><button class="ghost" id="v4MicStop" disabled>■ Стоп</button></div><button class="ghost" id="v4AddPiece" style="width:100%">＋ Импортировать готовый фрагмент из «Файлов»</button>'+
  '<div id="v4RecStatus" class="v4-status">Надень наушники при наложении. Safari может приостановить музыку при использовании микрофона. Запись не запускается при заблокированном экране.</div>'+
  '<h3 class="v4-section">Фрагменты ('+existing.length+')</h3>'+
  (existing.length?existing.map((take,i)=>'<div class="v4-take"><div><b>'+h(take.label||('Фрагмент '+(i+1)))+'</b><small>'+time(take.durationSec)+' · '+(take.mode==='overlay'?'Наложение с '+(take.offsetSec||0)+' с':'Продолжение')+'</small></div><button data-take-play="'+h(take.id)+'">▶</button><button data-take-delete="'+h(take.id)+'">×</button></div>').join(''):'<p class="v4-empty">Фрагментов нет. Записывай их по одному: куплет, припев, соло, рэп.</p>')+
@@ -124,6 +137,10 @@ function openFor(id,version){
  q('#v4Mode').onchange();
  q('#v4MicStart').onclick=()=>startRecording(id);
  q('#v4MicStop').onclick=stopRecording;
+ q('#v4AddPiece').onclick=()=>{
+  state.importTakeTarget={albumId:current.id,id,mode:q('#v4Mode').value,offsetSec:Math.max(0,Number(q('#v4Offset').value)||0)};
+  q('#v4TakeFile').click();
+ };
  q('#v4Mix').onclick=()=>mixDialog(id);
  D.querySelectorAll('[data-take-play]').forEach(b=>b.onclick=()=>previewTake(id,b.dataset.takePlay));
  D.querySelectorAll('[data-take-delete]').forEach(b=>b.onclick=()=>deleteTake(id,b.dataset.takeDelete));
@@ -292,6 +309,23 @@ function pcmToWav(buffer){
  }
  return out;
 }
-window.RaashStudioV4={openFor,showEQ,stopRecording};
+function linkedPlayer(id,version){
+ const t=track(id),z=t?.variants?.[version];if(!t||!z)return;
+ if(z.fileKey)return startPlay(t,version);
+ const url=z.suno||'';
+ const found=url.match(/^https:\/\/(?:www\.)?suno\.com\/(?:song|embed)\/([a-f0-9-]{36})(?:[/?#]|$)/i);
+ if(!found){
+  openSheet('Нет локальной записи · '+t.name,'<p>Вариант сохранён только как ссылка Suno. Для встроенного плеера нужна полная публичная ссылка вида https://suno.com/song/… . Для независимой работы импортируй собственный аудиофайл или собери запись из фрагментов.</p><button class="cta" id="v4OpenStudio">Открыть студию этой песни</button>');
+  q('#v4OpenStudio').onclick=()=>openFor(id,version);
+  return;
+ }
+ const embed='https://suno.com/embed/'+found[1];
+ openSheet('Слушать · '+t.name,
+  '<p class="v4-explain">Встроенный официальный плеер Suno, не новая страница. Этот вариант требует интернет и доступность песни у Suno. Эквалайзер приложения не управляет звуком iframe.</p>'+
+  '<iframe title="Официальный плеер Suno" src="'+embed+'" loading="lazy" allow="autoplay; encrypted-media" style="width:100%;height:180px;border:0;border-radius:15px;background:#130a11"></iframe>'+
+  '<button class="cta" id="v4SaveLocal">＋ Сделать независимую версию: добавить MP3 / записать</button>');
+ q('#v4SaveLocal').onclick=()=>openFor(id,version);
+}
+window.RaashStudioV4={openFor,showEQ,stopRecording,openLinked:linkedPlayer};
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
