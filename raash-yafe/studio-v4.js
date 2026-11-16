@@ -312,6 +312,8 @@ function pcmToWav(buffer){
 function linkedPlayer(id,version){
  const t=track(id),z=t?.variants?.[version];if(!t||!z)return;
  if(z.fileKey)return startPlay(t,version);
+ // Never let the previous local track play simultaneously with the iframe.
+ audio.pause();
  const url=z.suno||'';
  const found=url.match(/^https:\/\/(?:www\.)?suno\.com\/(?:song|embed)\/([a-f0-9-]{36})(?:[/?#]|$)/i);
  if(!found){
