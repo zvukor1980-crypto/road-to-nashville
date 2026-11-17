@@ -91,7 +91,7 @@ function init(){
  $('#sAlbums').before(div);
  $('#sSunoAdd').onclick=pasteFromClipboard;
  const originalPaint=paint;paint=function(){originalPaint();drawSuno()};
- const version=D.createElement('small');version.className='s8-version';version.textContent='Версия 8.0';div.append(version);
+ const version=D.createElement('small');version.className='s8-version';version.textContent='Версия 9.1';div.append(version);
  const originalAlbum=$('#sPlayAlbum').onclick;
  $('#sPlayAlbum').onclick=()=>{
   if(current.tracks.some(t=>t.variants.some(v=>v.fileKey)))return originalAlbum();
