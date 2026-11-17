@@ -23,7 +23,7 @@ function setup(){
  '<section class="v10-gallery"><div class="v10-section-head"><div><p class="v10-kicker">BAND ARCHIVE</p><h2>Группа в фотографиях</h2></div><button id="v10AllPhotos">Все фото</button></div><div class="v10-photo-grid">',
  '<button data-v10photo="studio"><img src="assets/studio.webp" loading="lazy" alt="Фотография группы в студии"><span>В СТУДИИ</span></button>',
  '<button data-v10photo="live"><img src="assets/live.webp" loading="lazy" alt="Фотография выступления группы"><span>ВЫСТУПЛЕНИЕ</span></button></div></section>',
- '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 10.0</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
+ '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 10.1</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
  '</div>',
  '<div class="v10-dock"><div class="v10-dock-top"><img id="v10Mini" src="assets/front.webp" alt=""><div class="v10-playing"><b id="v10Now">Выбери песню</b><small id="v10NowSub">МОЙ ПЛЕЕР</small></div><div class="v10-play-controls"><button id="v10Prev" aria-label="Предыдущая">‹</button><button id="v10Pause" class="v10-play" aria-label="Воспроизведение или пауза">▶</button><button id="v10Next" aria-label="Следующая">›</button></div></div><div class="v10-seek"><span id="v10Elapsed">0:00</span><input id="v10Range" type="range" min="0" max="1000" value="0" aria-label="Позиция"><span id="v10Duration">0:00</span></div></div>'
  ].join('');
