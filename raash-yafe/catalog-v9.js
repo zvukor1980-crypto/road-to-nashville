@@ -105,7 +105,7 @@ async function storeLink(id,index,ref){
 }
 function batchDialog(){
  openSheet('Альбом · две версии A и B',
-  '<p class="s9-help">Можешь вставить сразу все скопированные ссылки Suno. Я определю названия и разложу одинаковые песни по вариантам A/B. Чужие или нераспознанные песни без выбора не добавлю.</p>'+
+  '<p class="s9-help">Скопируй ссылку в Suno. Если в буфере сразу много ссылок — вставь все. Программа распределит известные песни по A/B и не затронет старые записи.</p>'+
   '<textarea id="s9Batch" class="s6-textarea" rows="6" placeholder="Вставь ссылки Suno, по одной на строку"></textarea>'+
   '<button id="s9FromClipboard" class="s9-alt">Вставить из буфера</button>'+
   '<button id="s9Auto" class="cta" style="width:100%">Найти песни и распределить A/B</button>'+
@@ -126,17 +126,23 @@ async function batchAssign(raw){
  const unresolved=[];
  const button=q('#s9Auto');if(button)button.disabled=true;
  try{
-  for(let i=0;i<parsed.length;i++){
-   if(q('#s9BatchStatus'))q('#s9BatchStatus').textContent='Проверяю '+(i+1)+' / '+parsed.length;
-   const src=parsed[i];let ref=src;
-   try{ref=await API().resolveSong(src)}catch(e){}
-   if(existing.has(ref.url.toLowerCase())||existing.has(src.url.toLowerCase())){duplicates++;continue}
-   const title=norm(ref.label||src.label);
-   const songMatch=title?album.tracks.find(t=>norm(t.name)===title||norm(t.trans)===title):null;
-   if(!songMatch){unresolved.push(ref);continue}
-   const variant=variants(songMatch).findIndex(v=>!v.suno&&!v.fileKey);
-   if(variant<0){unresolved.push(ref);continue}
-   songMatch.variants[variant].suno=ref.url;existing.add(ref.url.toLowerCase());assigned++;
+  // Resolve in small groups so importing 22 A/B links does not take 22 serial network waits.
+  for(let start=0;start<parsed.length;start+=4){
+   const group=parsed.slice(start,start+4);
+   if(q('#s9BatchStatus'))q('#s9BatchStatus').textContent='Проверяю '+(start+1)+'–'+Math.min(start+4,parsed.length)+' из '+parsed.length;
+   const results=await Promise.all(group.map(async src=>{
+    try{return await API().resolveSong(src)}catch(e){return src}
+   }));
+   results.forEach((ref,k)=>{
+    const src=group[k];
+    if(existing.has(ref.url.toLowerCase())||existing.has(src.url.toLowerCase())){duplicates++;return}
+    const title=norm(ref.label||src.label);
+    const songMatch=title?album.tracks.find(t=>norm(t.name)===title||norm(t.trans)===title):null;
+    if(!songMatch){unresolved.push(ref);return}
+    const variant=variants(songMatch).findIndex(v=>!v.suno&&!v.fileKey);
+    if(variant<0){unresolved.push(ref);return}
+    songMatch.variants[variant].suno=ref.url;existing.add(ref.url.toLowerCase());assigned++;
+   });
   }
   save();paint();
   const status=q('#s9BatchStatus');
@@ -167,14 +173,26 @@ function showPending(items,album,assigned,duplicates){
   save();closeSheet();paint();notify('Добавлено в A/B: '+count);
  };
 }
+async function quickImport(){
+ if(busy)return;
+ batchDialog();
+ try{
+  const text=await navigator.clipboard.readText();
+  const items=API()?.extract?.(text)||[];
+  if(!items.length)return;
+  const box=q('#s9Batch');if(box)box.value=text;
+  await batchAssign(text);
+ }catch(e){
+  const field=q('#s9Batch');if(field)field.focus();
+ }
+}
 function appendBulkButton(){
- const hub=q('#sSunoHub');if(!hub)return;
- let batch=q('#s9BatchOpen');
- if(batch)return;
- batch=d.createElement('button');batch.id='s9BatchOpen';batch.className='s9-batch';
- batch.textContent='У меня много ссылок · добавить все сразу';
- batch.onclick=batchDialog;
- hub.append(batch);
+ const button=q('#sSunoAdd');if(!button)return;
+ button.textContent='＋ Из Suno · песни A/B';
+ button.onclick=quickImport;
+ const redundant=q('#s9BatchOpen');if(redundant)redundant.remove();
+ // The old secondary entry point must not create unverified extra songs.
+ if(API())API().importDialog=batchDialog;
 }
 function setup(){
  if(!q('#simpleApp'))return;
