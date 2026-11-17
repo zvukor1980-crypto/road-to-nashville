@@ -153,8 +153,21 @@ async function importLinks(links){
    if($('#s6Progress'))$('#s6Progress').textContent='Песня '+(i+1)+' из '+links.length;
    let link;
    try{link=await resolveSong(links[i])}
-   catch(e){failed++;continue}
-   if(existing.has(link.key)||existing.has(links[i].key)){duplicates++;continue}
+   catch(e){link=links[i];failed++} // Keep the original short link; never discard the user's song.
+   if(existing.has(link.key)||existing.has(links[i].key)){
+    duplicates++;
+    if(!first){
+     const original=links[i].key;
+     for(const track of album.tracks){
+      const idx=track.variants.findIndex(v=>{
+       const ref=readLink(v.suno||'');
+       return ref&&(ref.key===original||ref.key===link.key);
+      });
+      if(idx>=0){first={id:track.id,version:idx};break}
+     }
+    }
+    continue;
+   }
    let t=null,v=-1;
    if(link.label){
     const norm=normalize(link.label);
@@ -172,8 +185,8 @@ async function importLinks(links){
   }
   library.current=album.id;current=album;save();ST.input='';paint();
   if(first){
-   if(failed)notify('Добавлено: '+added+'. Пока недоступно: '+failed);
-   else notify('Добавлено песен: '+added);
+   if(failed)notify('Ссылки сохранены. Некоторые песни Suno не открыл публично: '+failed);
+   else notify(added?'Добавлено песен: '+added:'Песня уже есть в библиотеке');
    return openStream(first.id,first.version);
   }
   openSheet('Добавление песен','<p>'+(duplicates?'Эти песни уже есть в библиотеке. ':'')+(failed?'Не получилось прочитать '+failed+' ссылок. Проверь интернет и попробуй ещё раз.':'')+'</p><button id="s6Retry" class="cta">Попробовать снова</button>');
