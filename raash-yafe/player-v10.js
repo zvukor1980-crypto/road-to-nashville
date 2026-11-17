@@ -23,9 +23,9 @@ function setup(){
  '<section class="v10-gallery"><div class="v10-section-head"><div><p class="v10-kicker">BAND ARCHIVE</p><h2>Группа в фотографиях</h2></div><button id="v10AllPhotos">Все фото</button></div><div class="v10-photo-grid">',
  '<button data-v10photo="studio"><img src="assets/studio.webp" loading="lazy" alt="Фотография группы в студии"><span>В СТУДИИ</span></button>',
  '<button data-v10photo="live"><img src="assets/live.webp" loading="lazy" alt="Фотография выступления группы"><span>ВЫСТУПЛЕНИЕ</span></button></div></section>',
- '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 11.0</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
+ '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 12.0</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
  '</div>',
- '<div class="v10-dock"><div class="v10-dock-top"><img id="v10Mini" src="assets/front.webp" alt=""><div class="v10-playing"><b id="v10Now">Выбери песню</b><small id="v10NowSub">МОЙ ПЛЕЕР</small></div><div class="v10-play-controls"><button id="v10Prev" aria-label="Предыдущая">‹</button><button id="v10Pause" class="v10-play" aria-label="Воспроизведение или пауза">▶</button><button id="v10Next" aria-label="Следующая">›</button></div></div><div class="v10-seek"><span id="v10Elapsed">0:00</span><input id="v10Range" type="range" min="0" max="1000" value="0" aria-label="Позиция"><span id="v10Duration">0:00</span></div></div>'
+ '<div class="v10-dock" style="position:fixed;bottom:0;left:0;right:0;max-height:126px;overflow:hidden"><div class="v10-dock-top" style="display:flex;align-items:center;gap:9px;min-height:44px;max-height:48px;overflow:hidden"><span id="v10Mini" class="v10-mini" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;min-width:38px;max-width:38px;min-height:38px;max-height:38px;flex:0 0 38px;overflow:hidden;background:#512632;border-radius:6px;color:#f9d9e2;font-weight:900;font-size:12px">RY</span><div class="v10-playing" style="flex:1;min-width:0;overflow:hidden"><b id="v10Now">Выбери песню</b><small id="v10NowSub">МОЙ ПЛЕЕР</small></div><div class="v10-play-controls" style="display:flex;align-items:center;gap:5px;flex-shrink:0"><button id="v10Prev" aria-label="Предыдущая">‹</button><button id="v10Pause" class="v10-play" aria-label="Воспроизведение или пауза">▶</button><button id="v10Next" aria-label="Следующая">›</button></div></div><div class="v10-seek" style="display:flex;align-items:center;gap:8px;width:100%;max-height:24px;overflow:hidden"><span id="v10Elapsed">0:00</span><input id="v10Range" type="range" min="0" max="1000" value="0" aria-label="Позиция" style="width:100%;min-width:0;flex:1"><span id="v10Duration">0:00</span></div></div>'
  ].join('');
  D.body.insertBefore(root,Q('#simpleApp')||Q('#shell'));
  installPhotoStrip();
@@ -139,12 +139,12 @@ function drawPlayer(){
 }
 function drawArtwork(album){
  const cover=album.id==='ani-po'?'assets/front.webp':'cover.svg';
- Q('#v10Cover').src=cover;Q('#v10Mini').src=cover;
+ Q('#v10Cover').src=cover; // The player uses a fixed-size RY monogram, never a cover image.
  if(S.coverUrl){URL.revokeObjectURL(S.coverUrl);S.coverUrl=null}
  if(album.coverKey)get(album.coverKey).then(blob=>{
   if(!(blob instanceof Blob)||current.id!==album.id)return;
   S.coverUrl=URL.createObjectURL(blob);
-  Q('#v10Cover').src=S.coverUrl;Q('#v10Mini').src=S.coverUrl;
+  Q('#v10Cover').src=S.coverUrl;
  }).catch(()=>{});
 }
 function importSuno(){
