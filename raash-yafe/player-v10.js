@@ -23,11 +23,12 @@ function setup(){
  '<section class="v10-gallery"><div class="v10-section-head"><div><p class="v10-kicker">BAND ARCHIVE</p><h2>Группа в фотографиях</h2></div><button id="v10AllPhotos">Все фото</button></div><div class="v10-photo-grid">',
  '<button data-v10photo="studio"><img src="assets/studio.webp" loading="lazy" alt="Фотография группы в студии"><span>В СТУДИИ</span></button>',
  '<button data-v10photo="live"><img src="assets/live.webp" loading="lazy" alt="Фотография выступления группы"><span>ВЫСТУПЛЕНИЕ</span></button></div></section>',
- '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 10.1</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
+ '<footer class="v10-footer"><div>רעש יפה · RA’ASH YAFE <span>STUDIO 11.0</span></div><p>Локальная музыка хранится на этом устройстве. Делай ZIP-копию, чтобы не потерять записи. Ссылки Suno не являются скачанными MP3.</p></footer>',
  '</div>',
  '<div class="v10-dock"><div class="v10-dock-top"><img id="v10Mini" src="assets/front.webp" alt=""><div class="v10-playing"><b id="v10Now">Выбери песню</b><small id="v10NowSub">МОЙ ПЛЕЕР</small></div><div class="v10-play-controls"><button id="v10Prev" aria-label="Предыдущая">‹</button><button id="v10Pause" class="v10-play" aria-label="Воспроизведение или пауза">▶</button><button id="v10Next" aria-label="Следующая">›</button></div></div><div class="v10-seek"><span id="v10Elapsed">0:00</span><input id="v10Range" type="range" min="0" max="1000" value="0" aria-label="Позиция"><span id="v10Duration">0:00</span></div></div>'
  ].join('');
  D.body.insertBefore(root,Q('#simpleApp')||Q('#shell'));
+ installPhotoStrip();
  Q('#v10Settings').onclick=showTools;
  Q('#v10Play').onclick=playAlbum;
  Q('#v10Suno').onclick=importSuno;
@@ -44,6 +45,25 @@ function setup(){
  const original=paint;paint=function(){original();draw()};
  for(const event of ['play','pause','timeupdate','loadedmetadata','ended'])audio.addEventListener(event,drawPlayer);
  draw();
+ // Keep the older working interface visible if any required new control fails to render.
+ D.body.classList.add('v10-ready');
+}
+function installPhotoStrip(){
+ const holder=D.createElement('section');
+ holder.className='v11-film';
+ holder.setAttribute('aria-label','Фотографии и обложки группы');
+ holder.innerHTML='<div class="v11-film-head"><strong>НАША ГРУППА</strong><span>Фото и обложки</span></div>'+
+  '<div class="v11-film-grid">'+
+  '<button data-v11photo="front"><img src="assets/front.webp" alt="Обложка альбома אני פה!" loading="eager"><span>АЛЬБОМ</span></button>'+
+  '<button data-v11photo="studio"><img src="assets/studio.webp" alt="Группа в студии" loading="eager"><span>СТУДИЯ</span></button>'+
+  '<button data-v11photo="live"><img src="assets/live.webp" alt="Группа выступает" loading="eager"><span>ВЫСТУПЛЕНИЕ</span></button>'+
+  '<button data-v11photo="back"><img src="assets/back.webp" alt="Задняя обложка альбома" loading="eager"><span>ОБЛОЖКА</span></button>'+
+  '</div>';
+ const librarySection=Q('#v10 .v10-library');
+ if(librarySection)librarySection.before(holder);
+ holder.querySelectorAll('[data-v11photo]').forEach(b=>b.onclick=()=>showPhotos(b.dataset.v11photo));
+ const giantGallery=Q('#v10 .v10-gallery');
+ if(giantGallery)giantGallery.classList.add('v11-legacy-gallery');
 }
 function draw(){
  if(!Q('#v10'))return;
