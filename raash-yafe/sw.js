@@ -1,6 +1,6 @@
 /* Ra'ash Yafe offline shell. Media remains in IndexedDB, not Cache Storage. */
-const CACHE='raash-yafe-v7.0';
-const CORE=['./','index.html','backup.js','studio-v3.js','studio-v3.css','studio-v4.js','studio-v4.css','simple-v5.js','simple-v5.css','suno-v6.js','suno-v6.css','assets/front.webp','assets/back.webp','assets/studio.webp','assets/live.webp','assets/icon-180.png','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
+const CACHE='raash-yafe-v8.0';
+const CORE=['./','index.html','backup.js','studio-v3.js','studio-v3.css','studio-v4.js','studio-v4.css','simple-v5.js','simple-v5.css','suno-v8.js','suno-v6.css','assets/front.webp','assets/back.webp','assets/studio.webp','assets/live.webp','assets/icon-180.png','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
 const SCOPE=new URL(self.registration.scope).pathname;
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -18,8 +18,17 @@ self.addEventListener('fetch',event=>{
   }).catch(async()=>await caches.match('./')||await caches.match('index.html')));
   return;
  }
+ // Scripts and styles update online instead of staying permanently stale on installed iPhones.
+ const isCode=/\.(?:js|css)$/i.test(url.pathname);
+ if(isCode){
+  event.respondWith(fetch(request,{cache:'no-cache'}).then(response=>{
+   if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(request,copy)))}
+   return response;
+  }).catch(()=>caches.match(request)));
+  return;
+ }
  event.respondWith(caches.match(request).then(cached=>cached||fetch(request).then(response=>{
-  if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(request,copy))}
+  if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(request,copy)))}
   return response;
  })));
 });
