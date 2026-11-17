@@ -32,7 +32,8 @@ function enableStudioButtons(){
  });
 }
 function init(){
- topControls();
+ const headless=document.documentElement.dataset.ry==='13';
+ if(!headless)topControls();
  const takeChooser=D.createElement('input');takeChooser.id='v4TakeFile';takeChooser.type='file';takeChooser.accept='audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus';takeChooser.hidden=true;D.body.append(takeChooser);
  takeChooser.onchange=async e=>{
   const f=e.target.files?.[0];e.target.value='';const target=state.importTakeTarget;state.importTakeTarget=null;
@@ -46,8 +47,10 @@ function init(){
    save();paint();openFor(target.id);notify('Фрагмент импортирован: '+f.name)
   }catch(e){notify('Не удалось сохранить фрагмент')}
  };
- const prior=paint;paint=function(){prior();enableStudioButtons()};
- enableStudioButtons();
+ if(!headless){
+  const prior=paint;paint=function(){prior();enableStudioButtons()};
+  enableStudioButtons();
+ }
  D.addEventListener('pointerdown',()=>{if(state.eqctx?.state==='suspended')state.eqctx.resume().catch(()=>{})},{capture:true});
  if('mediaSession' in navigator){
   const old=audio.onplay;
@@ -149,10 +152,13 @@ function openFor(id,version){
 }
 function updateRecordingUI(msg){
  const banner=q('#v4NowRec');if(banner)banner.hidden=!state.recording;
+ const v13=q('#ryRec');if(v13)v13.hidden=!state.recording;
  if(q('#v4RecStatus'))q('#v4RecStatus').textContent=msg||'';
  if(q('#v4MicStart'))q('#v4MicStart').disabled=state.recording;
  if(q('#v4MicStop'))q('#v4MicStop').disabled=!state.recording;
- if(q('#v4RecClock'))q('#v4RecClock').textContent=time((Date.now()-state.recStart)/1000);
+ const clock=time((Date.now()-state.recStart)/1000);
+ if(q('#v4RecClock'))q('#v4RecClock').textContent=clock;
+ if(q('#ryRecClock'))q('#ryRecClock').textContent=clock;
 }
 async function startRecording(id){
  if(state.recording)return;

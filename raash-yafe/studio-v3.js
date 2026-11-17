@@ -11,14 +11,8 @@ function copying(v){
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(()=>notify('Скопировано')).catch(()=>window.prompt('Скопируй текст:',v));
  else window.prompt('Скопируй текст:',v);
 }
-function setup(){
- const target=D.querySelector('#tracks'),tools=D.createElement('div');
- tools.id='studioTools';
- tools.innerHTML='<div class="studio-search"><span>⌕</span><input id="studioSearch" type="search" placeholder="Поиск песни" aria-label="Поиск по альбому"></div><div class="studio-filter-row"><button class="studio-pill on" data-filter="all">Все</button><button class="studio-pill" data-filter="ready">С аудио</button><button class="studio-pill" data-filter="favorites">Избранное</button><button class="studio-pill studio-new-album" id="studioAlbumImport">＋ Альбом из MP3</button></div>';
- target.before(tools);
- D.querySelector('#studioSearch').oninput=e=>{st.query=e.target.value.toLocaleLowerCase().trim();filter()};
- tools.querySelectorAll('[data-filter]').forEach(x=>x.onclick=()=>{st.filter=x.dataset.filter;tools.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('on',b===x));filter()});
- D.querySelector('#studioAlbumImport').onclick=createAlbumDialog;
+function ensureStudioInputs(){
+ if(D.querySelector('#trackCoverFile'))return;
  const cover=D.createElement('input');cover.id='trackCoverFile';cover.type='file';cover.accept='image/*';cover.hidden=true;D.body.append(cover);
  cover.onchange=async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
@@ -30,6 +24,18 @@ function setup(){
  };
  const batch=D.createElement('input');batch.id='studioFiles';batch.type='file';batch.accept='audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg,.opus';batch.multiple=true;batch.hidden=true;D.body.append(batch);
  batch.onchange=async e=>{const files=Array.from(e.target.files||[]);e.target.value='';if(files.length)await makeAlbum(files)};
+}
+function setup(){
+ ensureStudioInputs();
+ if(document.documentElement.dataset.ry==='13')return;
+ const target=D.querySelector('#tracks');if(!target)return;
+ const tools=D.createElement('div');
+ tools.id='studioTools';
+ tools.innerHTML='<div class="studio-search"><span>⌕</span><input id="studioSearch" type="search" placeholder="Поиск песни" aria-label="Поиск по альбому"></div><div class="studio-filter-row"><button class="studio-pill on" data-filter="all">Все</button><button class="studio-pill" data-filter="ready">С аудио</button><button class="studio-pill" data-filter="favorites">Избранное</button><button class="studio-pill studio-new-album" id="studioAlbumImport">＋ Альбом из MP3</button></div>';
+ target.before(tools);
+ D.querySelector('#studioSearch').oninput=e=>{st.query=e.target.value.toLocaleLowerCase().trim();filter()};
+ tools.querySelectorAll('[data-filter]').forEach(x=>x.onclick=()=>{st.filter=x.dataset.filter;tools.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('on',b===x));filter()});
+ D.querySelector('#studioAlbumImport').onclick=createAlbumDialog;
  const original=paint;paint=function(){original();enrich()};enrich();
 }
 function filter(){
@@ -141,5 +147,6 @@ async function makeAlbum(files){
  notify('Альбом создан: '+a.tracks.length+' песен, '+loaded+' записей');
  if(failed||skipped)openSheet('Импорт с пропусками','<p>Добавлено '+loaded+' записей. Пропущено '+(failed+skipped)+' файлов (дубликаты вариантов или ошибка хранения). Оригиналы не удалены.</p>');
 }
+window.RaashStudioV3={studioSong,createAlbumDialog};
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
 })();
