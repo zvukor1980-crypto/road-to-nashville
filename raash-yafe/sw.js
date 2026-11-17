@@ -1,6 +1,6 @@
 /* Ra'ash Yafe offline shell. Media remains in IndexedDB, not Cache Storage. */
-const CACHE='raash-yafe-v12.0';
-const CORE=['./','index.html','backup.js','studio-v3.js','studio-v3.css','studio-v4.js','studio-v4.css','simple-v5.js','simple-v5.css','suno-v8.js','catalog-v9.js','catalog-v9.css','player-v10.js','player-v10.css','compact-v11.css','suno-v6.css','assets/front.webp','assets/back.webp','assets/studio.webp','assets/live.webp','assets/icon-180.png','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
+const CACHE='raash-yafe-v13.0';
+const CORE=['./','index.html','app-v13.js','app-v13.css','backup.js','studio-v3.js','studio-v4.js','suno-v8.js','catalog-v9.js','assets/front.webp','assets/back.webp','assets/studio.webp','assets/live.webp','assets/icon-180.png','manifest.webmanifest','cover.svg','back.svg','icon.svg'];
 const SCOPE=new URL(self.registration.scope).pathname;
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));

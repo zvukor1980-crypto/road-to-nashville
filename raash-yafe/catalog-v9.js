@@ -87,7 +87,9 @@ function showAttach(id,index){
   await storeLink(id,index,items[0]);
  };
  q('#s9File').onclick=()=>{
-  closeSheet();const opener=[...d.querySelectorAll('#sSongs [data-open]')].find(x=>x.dataset.open===id);
+  closeSheet();
+  if(window.RaashV13?.attachLocal)return window.RaashV13.attachLocal(id,index);
+  const opener=[...d.querySelectorAll('#sSongs [data-open]')].find(x=>x.dataset.open===id);
   if(opener)opener.click();else notify('Не найдена песня');
  };
 }
@@ -195,8 +197,9 @@ function appendBulkButton(){
  if(API())API().importDialog=batchDialog;
 }
 function setup(){
- if(!q('#simpleApp'))return;
  seedKnownOnly();
+ if(API())API().importDialog=batchDialog;
+ if(!q('#simpleApp'))return;
  const original=paint;paint=function(){original();render();appendBulkButton()};
  render();appendBulkButton();
 }

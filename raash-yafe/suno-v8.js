@@ -205,6 +205,7 @@ function unavailableSong(t,version,url){
  $('#s8Original').onclick=()=>{if(safeURL)window.open(safeURL,'_blank','noopener');else notify('Ссылка отсутствует')};
  $('#s8LocalFile').onclick=()=>{
   closeSheet();
+  if(window.RaashV13?.attachLocal)return window.RaashV13.attachLocal(t.id,version);
   const b=[...D.querySelectorAll('#sSongs [data-open]')].find(x=>x.dataset.open===t.id);
   if(b)b.click();else notify('Выбери песню в списке');
  };
@@ -238,6 +239,7 @@ async function openStream(id,version){
   '<button class="s6-paste" id="s6ImportMP3">Сохранить свой MP3 для прослушивания без интернета</button>');
  $('#s6ImportMP3').onclick=()=>{
   closeSheet();
+  if(window.RaashV13?.attachLocal)return window.RaashV13.attachLocal(id,version);
   const b=[...D.querySelectorAll('#sSongs [data-open]')].find(x=>x.dataset.open===id);
   if(b)b.click();else notify('Выбери песню из списка');
  };
