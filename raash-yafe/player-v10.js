@@ -3,7 +3,7 @@
 'use strict';
 const D=document,Q=s=>D.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const S={albumId:null,query:'',coverUrl:null};
+const S={albumId:null,query:'',coverUrl:null,streaming:null};
 const songs=()=>Array.isArray(current?.tracks)?current.tracks:[];
 const find=id=>songs().find(t=>t.id===id);
 const hh=n=>Number.isFinite(n)?Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'):'0:00';
@@ -39,7 +39,7 @@ function setup(){
  Q('#v10Search').oninput=e=>{S.query=e.target.value.trim().toLocaleLowerCase();drawTracks()};
  Q('#v10Prev').onclick=()=>cycle(-1);
  Q('#v10Next').onclick=()=>cycle(1);
- Q('#v10Pause').onclick=()=>{if(audio.src){if(audio.paused)audio.play().catch(()=>notify('Не удалось воспроизвести'));else audio.pause()}else playAlbum()};
+ Q('#v10Pause').onclick=()=>{if(S.streaming){const state=S.streaming;return playVariant(state.id,state.index)}if(audio.src){if(audio.paused)audio.play().catch(()=>notify('Не удалось воспроизвести'));else audio.pause()}else playAlbum()};
  Q('#v10Range').oninput=e=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=audio.duration*Number(e.target.value)/1000};
  const original=paint;paint=function(){original();draw()};
  for(const event of ['play','pause','timeupdate','loadedmetadata','ended'])audio.addEventListener(event,drawPlayer);
@@ -77,8 +77,17 @@ function drawTracks(){
 function getSong(id){return songs().find(t=>t.id===id)}
 function playVariant(id,i){
  const t=getSong(id),v=t?.variants?.[i];if(!v)return;
- if(v.fileKey){startPlay(t,i);return}
- if(v.suno){const handler=window.RaashSunoV8?.openStream||window.RaashSunoV6?.openStream;if(handler)handler(id,i);else notify('Встроенный плеер Suno сейчас недоступен');return}
+ if(v.fileKey){S.streaming=null;startPlay(t,i);return}
+ if(v.suno){
+  S.streaming={id,index:i};
+  audio.pause();
+  if(audio.src){audio.removeAttribute('src');audio.load()}
+  selected={id,v:i};
+  drawPlayer();
+  const handler=window.RaashSunoV8?.openStream||window.RaashSunoV6?.openStream;
+  if(handler)handler(id,i);else notify('Встроенный плеер Suno сейчас недоступен');
+  return;
+ }
  if(window.RaashYafeV9?.showAttach)window.RaashYafeV9.showAttach(id,i);
  else{openSheet('Добавить версию '+(i?'B':'A'),'<p>Прикрепи MP3 или ссылку Suno.</p><button id="v10Attach" class="cta">Добавить файл</button>');Q('#v10Attach').onclick=()=>Q('#sBatchPicker')?.click()}
 }
@@ -102,7 +111,7 @@ function drawPlayer(){
  if(!Q('#v10Pause'))return;
  const t=selected&&getSong(selected.id);
  Q('#v10Now').textContent=t?.name||'Выбери песню';
- Q('#v10NowSub').textContent=t?'ВЕРСИЯ '+(selected.v?'B':'A')+' · '+current.name:'МОЙ ПЛЕЕР';
+ Q('#v10NowSub').textContent=S.streaming?'SUNO · ВЕРСИЯ '+(selected?.v?'B':'A')+' · ОНЛАЙН':t?'ВЕРСИЯ '+(selected.v?'B':'A')+' · '+current.name:'МОЙ ПЛЕЕР';
  Q('#v10Pause').textContent=audio.src&&!audio.paused?'Ⅱ':'▶';
  Q('#v10Elapsed').textContent=hh(audio.currentTime);
  Q('#v10Duration').textContent=hh(audio.duration);
