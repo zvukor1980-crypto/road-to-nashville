@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0b0c0f"><meta name="raash-release" content="11.0"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0c0f"><meta name="raash-release" content="12.0"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="רעש יפה">
 <title>רעש יפה — Музыкальная студия</title>
@@ -81,6 +81,18 @@ body.v10-ready #simpleApp,body.v10-ready #shell,body.v10-ready .bar{display:none
 #v10 .v10-coverwrap{width:88px!important;height:88px!important}
 #v10 .v10-track{grid-template-columns:minmax(0,1fr) 116px!important}
 }
+</style>
+<style id="v12-player-guard">
+/* Safeguard in the HTML itself: the bottom player cannot swallow the iPhone display. */
+#v10 .v10-dock{position:fixed!important;inset:auto 0 0!important;z-index:50!important;max-height:126px!important;overflow:hidden!important;box-sizing:border-box!important;background:#14161b!important}
+#v10 .v10-dock-top{display:flex!important;align-items:center!important;min-height:44px!important;max-height:48px!important;gap:8px!important;overflow:hidden!important}
+#v10 #v10Mini{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;overflow:hidden!important}
+#v10 .v10-playing{display:grid!important;gap:3px!important;flex:1 1 0!important;min-width:0!important;max-height:44px!important;overflow:hidden!important}
+#v10 .v10-playing b,#v10 .v10-playing small{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#v10 .v10-play-controls{display:flex!important;align-items:center!important;flex:0 0 auto!important;gap:4px!important}
+#v10 .v10-seek{display:flex!important;align-items:center!important;width:100%!important;max-height:22px!important;overflow:hidden!important}
+#v10 .v10-seek input{min-width:0!important;flex:1 1 0!important}
+#v10 .v10-tracklist{position:relative!important;z-index:1!important}
 </style>
 </head>
 <body><div id="shell">
