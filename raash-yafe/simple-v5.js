@@ -114,8 +114,8 @@ function detail(id){const t=findSong(id);if(!t)return;
  q('#sheetbody').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{S.fileTarget={album:current.id,id,v:Number(b.dataset.add)};q('#sAudioPicker').click()});
  q('#sRecord').onclick=()=>window.RaashStudioV4?.openFor(id);
  q('#sLyrics').onclick=()=>q('#tracks [data-songid="'+id+'"] [data-studio]')?.click();
- q('#sEdit').onclick=()=>editSong(id);q('#sLinkEdit').onclick=()=>editVariant(id,0);
- q('#sLinkListen').onclick=()=>{const i=t.variants.findIndex(v=>v.suno);if(i>=0)window.RaashStudioV4?.openLinked(id,i);else notify('Ссылка Suno ещё не добавлена')};
+ q('#sEdit').onclick=()=>editSong(id);q('#sLinkEdit').onclick=()=>window.RaashSunoV6?.importDialog?window.RaashSunoV6.importDialog():editVariant(id,0);
+ q('#sLinkListen').onclick=()=>{const i=t.variants.findIndex(v=>v.suno);if(i>=0)(window.RaashSunoV6?.openStream?window.RaashSunoV6.openStream(id,i):window.RaashStudioV4?.openLinked(id,i));else window.RaashSunoV6?.importDialog()};
 }
 async function importChosen(e){const f=e.target.files?.[0],d=S.fileTarget;e.target.value='';S.fileTarget=null;if(!f||!d)return;
  if(!f.type.startsWith('audio/')&&!/\.(mp3|wav|m4a|aac|flac)$/i.test(f.name))return notify('Нужен файл MP3, WAV или M4A');
