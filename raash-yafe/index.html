@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0b0c0f"><meta name="raash-release" content="10.1"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0c0f"><meta name="raash-release" content="11.0"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="רעש יפה">
 <title>רעש יפה — Музыкальная студия</title>
@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="suno-v6.css">
 <link rel="stylesheet" href="catalog-v9.css">
 <link rel="stylesheet" href="player-v10.css">
+<link rel="stylesheet" href="compact-v11.css">
 <style>
 :root{color-scheme:dark;--bg:#090708;--panel:#181113;--panel2:#26161b;--pink:#fc4c83;--red:#d5203e;--gold:#e8c5a0;--line:#ffffff22;--muted:#b2a1a8;--fg:#fff2ee}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;color:var(--fg);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(100% 60% at 50% -8%,#80133075,transparent 73%),linear-gradient(150deg,#0b080a,#170d13 48%,#060607);min-height:100dvh;padding-bottom:calc(145px + env(safe-area-inset-bottom))}
@@ -52,7 +53,36 @@ label.field{display:block;font-size:12px;color:#d8b6c0;margin:12px 0 5px}
 footer{font-size:11px;text-align:center;color:#a78d96;line-height:1.5;margin:21px 0}.hint{border-left:3px solid #ef6090;padding:12px 14px;background:#ffffff08;font-size:12px;color:#d3b7c3;border-radius:0 12px 12px 0}
 input[type=file]{max-width:100%}video{max-width:100%;border-radius:12px}select.fieldinput{color-scheme:dark}
 @media(min-width:620px){.hero{max-width:460px;margin:auto}body{padding-bottom:140px}}
-</style></head>
+</style>
+<style id="v11-critical-mobile">
+/* This compact layout remains intact even when Safari delays external CSS updates. */
+body:not(.v10-ready) #v10{display:none!important}
+body:not(.v10-ready) #simpleApp{display:block!important}
+body.v10-ready #simpleApp,body.v10-ready #shell,body.v10-ready .bar{display:none!important}
+#v10{display:block;background:#0d0e11;color:#f2f1f0;min-height:100vh;padding-bottom:110px!important}
+#v10 img{max-width:100%;display:block;object-fit:cover}
+#v10 .v10-page{padding:0 12px;max-width:760px;margin:auto}
+#v10 .v10-header{height:62px!important;padding:6px 0!important}
+#v10 .v10-hero{display:grid!important;grid-template-columns:106px minmax(0,1fr)!important;gap:10px!important;max-height:142px!important;margin:9px 0!important;padding:10px!important;overflow:hidden!important}
+#v10 .v10-coverwrap{width:106px!important;height:106px!important;max-height:106px!important;aspect-ratio:1!important}
+#v10 .v10-coverwrap img{width:100%!important;height:100%!important}
+#v10 .v10-hero-info h1{font-size:26px!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+#v10 .v10-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#v10 .v11-film-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+#v10 .v11-film-grid button{height:78px!important;overflow:hidden!important;position:relative}
+#v10 .v11-film-grid img{width:100%!important;height:100%!important;object-fit:cover!important}
+#v10 .v11-legacy-gallery{display:none!important}
+#v10 .v10-track{display:grid!important;grid-template-columns:minmax(0,1fr) 128px!important;gap:8px!important;min-height:60px!important}
+#v10 .v10-variant-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#v10 .v10-variant{min-height:44px!important}
+#v10 .v10-dock{position:fixed!important;left:0;right:0;bottom:0;z-index:50}
+@media(max-width:360px){
+#v10 .v10-hero{grid-template-columns:88px minmax(0,1fr)!important}
+#v10 .v10-coverwrap{width:88px!important;height:88px!important}
+#v10 .v10-track{grid-template-columns:minmax(0,1fr) 116px!important}
+}
+</style>
+</head>
 <body><div id="shell">
 <header><div class="mark"><div class="logo" dir="rtl">רעש יפה</div><div><div class="tag">RA'ASH YAFE</div><div class="small">Твоя музыкальная студия</div></div></div><button id="settings" class="iconbtn" aria-label="Настройки">⚙</button></header>
 <section class="hero"><div class="art"><img id="cover" src="cover.svg" alt="Обложка альбома"></div><div class="herofoot"><div><div class="subtitle">GRUNGE · ISRAEL · STUDIO</div><h1 id="albumtitle" dir="rtl">אני פה!</h1><div id="albumsub" class="small">Первый альбом · 8 композиций</div></div><button class="cta" id="albumplay">▶ Играть</button></div></section>
