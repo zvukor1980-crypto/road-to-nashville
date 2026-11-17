@@ -23,3 +23,8 @@
 body:has(#overlay.show .s6-frame) .s-player{visibility:hidden;pointer-events:none}
 @media(max-width:390px){#sSunoHub{padding:13px}.s6-hub-header strong{font-size:12px}.s6-big{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.s6-big,.s6-paste{transition:none!important}}
+/* v8: clear status when Suno hides a track; visible build marker for old PWA debugging */
+.s8-version{display:block;font:600 10px/1.5 -apple-system,BlinkMacSystemFont,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#77757c;margin-top:9px;text-align:right}
+.s8-warning{padding:16px;border-radius:12px;border:1px solid #81515b;background:#2e1c23;color:#fff;margin:12px 0 17px}
+.s8-warning b{display:block;color:#ffe6ea;font-size:16px;line-height:1.5}
+.s8-warning p{color:#d0bcc1!important;font-size:13px!important;line-height:1.7!important;margin:10px 0 0}
